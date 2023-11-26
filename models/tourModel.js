@@ -94,7 +94,7 @@ tourSchema.pre('save', function (next) {
 });
 
 tourSchema.pre('save', (next) => {
-  console.log('will save document');
+  console.log('Test Document Middleware');
   next();
 });
 
