@@ -1,14 +1,21 @@
 const express = require('express');
 const userContrller = require('../controllers/userController');
+const authController = require('../controllers/authController');
 
-const route = express.Router(); //middleware
+const router = express.Router(); //middleware
 
+//this don't follow,
+router.post('/signup', authController.signup);
+router.post('/login', authController.login);
+
+
+//These routes follow RestAPI format
 //User Route
-route.route('/').get(userContrller.getAllUser).post(userContrller.createUser);
-route
+router.route('/').get(userContrller.getAllUser).post(userContrller.createUser);
+router
   .route('/:id')
   .get(userContrller.getUser)
   .patch(userContrller.updateUser)
   .delete(userContrller.deleteUser);
 
-module.exports = route;
+module.exports = router;
