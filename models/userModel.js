@@ -17,6 +17,9 @@ const userSchema = new mongoose.Schema({
   photo: {
     type: String,
   },
+  passwordChangedAt: {
+    type: Date,
+  },
   password: {
     type: String,
     required: [true, 'Please provide your password.'],
@@ -56,6 +59,23 @@ userSchema.methods.correctPassword = async function (
   //The bcrupt compare function compares hashed password and unhashed password.
   return await bcrypt.compare(candidatePassword, userPassword);
 };
+
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000, // Convert to seconds
+      10,
+    );
+    console.log(changedTimestamp, JWTTimestamp);
+    const bool = JWTTimestamp <= changedTimestamp;
+    console.log(bool);
+    return bool; //if true means that changed Password after the token is issued
+  }
+
+  //false means not changed
+  return false;
+};
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
