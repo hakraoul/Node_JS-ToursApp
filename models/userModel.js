@@ -17,6 +17,11 @@ const userSchema = new mongoose.Schema({
   photo: {
     type: String,
   },
+  role: {
+    type: String,
+    enum: ['user', 'guide', 'lead-guide', 'admin'],
+    default: 'user',
+  },
   passwordChangedAt: {
     type: Date,
   },
@@ -66,9 +71,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
       this.passwordChangedAt.getTime() / 1000, // Convert to seconds
       10,
     );
-    console.log(changedTimestamp, JWTTimestamp);
     const bool = JWTTimestamp <= changedTimestamp;
-    console.log(bool);
     return bool; //if true means that changed Password after the token is issued
   }
 
